@@ -1,9 +1,29 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
+-- if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
 
 -- AstroCore provides a central place to modify mappings, vim options, autocommands, and more!
 -- Configuration documentation can be found with `:h astrocore`
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
 --       as this provides autocomplete and documentation while editing
+
+local function goto_next_term()
+  local cur = vim.b.toggle_number or 0
+  -- si no es un terminal, quizá partir de 1
+  local next = cur + 1
+  if next > 3 then
+    next = 1
+  end
+  vim.cmd(string.format("%dToggleTerm", next))
+end
+
+local function goto_prev_term()
+  local cur = vim.b.toggle_number or 0
+  local prev = cur - 1
+  if prev < 1 then
+    prev = 3
+  end
+  vim.cmd(string.format("%dToggleTerm", prev))
+end
+
 
 ---@type LazySpec
 return {
@@ -72,6 +92,14 @@ return {
           end,
           desc = "Close buffer from tabline",
         },
+
+        ["<Leader>tm"] = { name = "Select terminal number" },
+
+        ["<Leader>tm1"] = { "<cmd>1ToggleTerm<CR>", desc = "ToggleTerm 1" },
+        ["<Leader>tm2"] = { "<cmd>2ToggleTerm<CR>", desc = "ToggleTerm 2" },
+        
+        ["<Leader>tj"] = { goto_next_term, desc = "Next terminal" },
+        ["<Leader>tk"] = { goto_prev_term, desc = "Previous terminal" },
 
         -- tables with just a `desc` key will be registered with which-key if it's installed
         -- this is useful for naming menus

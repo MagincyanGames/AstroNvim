@@ -23,5 +23,7 @@ if not pcall(require, "lazy") then
   vim.cmd.quit()
 end
 
+vim.cmd("autocmd! TermEnter term://* lua vim.cmd('startinsert')")
+
 require "lazy_setup"
 require "polish"
